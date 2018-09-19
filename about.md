@@ -2,45 +2,44 @@
 title: About
 layout: page
 ---
-![Profile Image]({{ site.url }}/{{ site.picture }})
+![Krzysztof Słonka]({{ site.url }}/{{ site.picture }})
 
-<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-
-<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+<p>I have 3+ years of commercial Node.js and JavaScript experience. Currently I'm working mostly as a back-end developer but I enjoy doing interesting and challenging front-end tasks. In my free time I'm expanding my knowledge of Elm and Haskell.</p>
 
 <h2>Skills</h2>
 
 <ul class="skill-list">
-	<li>HTML - Jade - Haml - Erb</li>
-	<li>Responsive (Mobile First)</li>
-	<li>CSS (Stylus, Sass, Less)</li>
-	<li>Css Frameworks (Bootstrap, Foundation)</li>
-	<li>Javascript (Design Patterns, Testes)</li>
-	<li>NodeJS</li>
-	<li>AngularJS - ReactJS</li>
+	<li>JavaScript - TypeScript - Elm - Java - Haskel</li>
+	<li>Node.js - Spring Framework</li>
+	<li>Angular - React</li>
+	<li>MySQL - PostgreSQL - MongoDB - Neo4J</li>
+	<li>Mocha - Jest - JUnit</li>
+	<li>AWS - S3 - ECS - SQS - SNS - Lambda</li>
+	<li>Terraform - Spinnaker</li>
+	<li>Docker - K8S - Vagrant - Puppet</li>
+	<li>IntelliJ - Eclipse</li>
+	<li>AJAX</li>
+	<li>Socket.io</li>
+	<li>OpenAPI</li>
+	<li>Microservices</li>
 	<li>Grunt - Gulp - Yeoman</li>
-	<li>Git</li>
-	<li>PHP</li>
-	<li>Python</li>
-	<li>MySQL - MongoDB</li>
-	<li>Scrum and Kanban</li>
-	<li>TDD e Continuous Integration</li>
+	<li>Git - Mercurial</li>
+	<li>Scrum - Kanban</li>
+	<li>TDD - BDD</li>
+	<li>Continuous Integration - Continuous Deployment</li>
 </ul>
 
-<h2>Projects</h2>
+<h2>Commercial projects</h2>
 
 <ul>
-	<li><a href="https://github.com/">Lorem Lorem</a></li>
-	<li><a href="https://github.com/">Ipsum Dolor</a></li>
-	<li><a href="https://github.com/">Dolor Lorem</a></li>
+	<li><a href="http://www.schibsted.pl/news/improvement-year-makes-magic-front-page-editing/">Chinook</a></li>
+	<li><a href="http://www.schibsted.pl/news/easier-way-for-journalists-to-test-their-headlines/">A/B Tool</a></li>
+	<li><a href="https://www.schibsted.com/no/Press-Room/News-archive/2018/Aftenpostens-reinvented-frontpage-Best-in-Europe/">Curate</a></li>
+</ul>
+
+<h2>Personal projects</h2>
+
+<ul>
+	<li><a href="https://undoo.herokuapp.com/details.html">Undoo</a></li>
+	<li><a href="https://chrome.google.com/webstore/detail/gumtree-mapview-free/lifgjgfhbdboomiaenigfkgkaonbmbgd">Gumtree mapview</a></li>
 </ul>
