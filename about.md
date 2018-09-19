@@ -42,4 +42,5 @@ layout: page
 <ul>
 	<li><a href="https://undoo.herokuapp.com/details.html">Undoo</a></li>
 	<li><a href="https://chrome.google.com/webstore/detail/gumtree-mapview-free/lifgjgfhbdboomiaenigfkgkaonbmbgd">Gumtree mapview</a></li>
+	<li><a href="https://knbit.edu.pl/pl/projekty/8/getintime">GetInTime</a></li>
 </ul>
