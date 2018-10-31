@@ -57,7 +57,7 @@ To test the results of your library,
 we setup two servers talking to each other.
 The server 1 forwards first request to server 2 with a 3 second delay
 and the second request without the delay.
-Server 2 just responds with status 200 and `'Hello, World!\n'`
+Server 2 just responds with status 200 and `'Hello, World!'`.
 If everything goes right, we should observe log entries like this:
 1. Incoming request 1 with header 1
 2. Incoming request 2 with header 2
@@ -87,7 +87,7 @@ const server = http.createServer((req, res) => {
       console.log('s1: response', response.headers);
       res.statusCode = 200;
       res.setHeader('Content-Type', 'text/plain');
-      res.end('Hello, World!\n');
+      res.end('Hello, World!');
     }).end();
   }, delay * 1000);
   delay = 0;
@@ -111,7 +111,7 @@ const port2 = 3001;
 const server2 = http.createServer((req, res) => {
   res.statusCode = 200;
   res.setHeader('Content-Type', 'text/plain');
-  res.end('Hello, World!\n');
+  res.end('Hello, World!');
 });
 
 server2.listen(port2, hostname, () => {
@@ -251,7 +251,7 @@ const fs = require('fs');
 const util = require('util');
 
 function debug(...args) {
-  fs.writeSync(process.stdout.fd, `${util.format(...args)}\n`);
+  fs.writeSync(process.stdout.fd, `${util.format(...args)}`);
 }
 
 asyncHooks.createHook({
