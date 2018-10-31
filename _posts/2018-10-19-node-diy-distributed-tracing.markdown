@@ -440,7 +440,7 @@ Which is exactly what we wanted.
 # Summary
 
 We have succesfuly created a POC distributed tracing library.
-Of course there are many more aspects to distributed tracing like: sampling, spans, collecting data, visualization,
+Of course there are more aspects to distributed tracing like: sampling, spans, collecting data, visualization,
 but this is still very impressive that we were able to do this in approximately 100 lines of code.
 
 You can find complate source code [on my github](https://github.com/slonka/node-diy-distributed-tracing).
