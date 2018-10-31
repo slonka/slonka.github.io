@@ -6,8 +6,8 @@ tag:
 - node
 - nodejs
 - node.js
-- javascript
-- ecmascript
+- JavaScript
+- ECMAScript
 - distributed
 - distributed tracing
 - x-correlation-id
@@ -26,7 +26,7 @@ description: Markdown summary with different options
 This is a first post of the series called **Node DIY** - a guide that
 will explain how seemingly complex tools/frameworks/ideas work under the hood
 and what is at the core of them.
-I will try to introduce the topic and implement a bare-bones, no dependecies solution.
+I will try to introduce the topic and implement a bare-bones, no dependencies solution.
 It will be far from production ready, but that's the point.
 
 Today's topic is distributed tracing.
@@ -168,7 +168,7 @@ Nothing fancy, just random bits.
 ## Part 3 - naive approach
 
 So far we know how to inject our custom headers with some unique identifier,
-but how do we know keep track of the headers when we have multiple requests comming through?
+but how do we know keep track of the headers when we have multiple requests coming through?
 
 A naive implementation might look something like this:
 
@@ -439,8 +439,8 @@ Which is exactly what we wanted.
 
 # Summary
 
-We have succesfuly created a POC distributed tracing library.
-Of course there are many more aspects to distributed tracing like: sampling, spans, collecting data, visualization,
+We have successfully created a POC distributed tracing library.
+Of course there are many aspects to distributed tracing like: sampling, spans, collecting data, visualization,
 but this is still very impressive that we were able to do this in approximately 100 lines of code.
 
-You can find complate source code [on my github](https://github.com/slonka/node-diy-distributed-tracing).
+You can find complete source code [on my github](https://github.com/slonka/node-diy-distributed-tracing).
