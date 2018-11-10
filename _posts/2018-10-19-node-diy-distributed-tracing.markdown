@@ -17,7 +17,7 @@ tag:
 star: true
 category: blog
 author: slonka
-description: Markdown summary with different options
+description: Introduction to distributed tracing and an example implementation in node.js
 ---
 
 
