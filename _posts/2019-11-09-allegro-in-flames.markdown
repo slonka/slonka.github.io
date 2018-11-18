@@ -16,9 +16,9 @@ tag:
 - --prof
 - --prof-process
 - 0x
-- presentations
+- slides
 star: true
-category: presentations
+category: slides
 author: slonka
 description: An introduction to profiling using Allegro's Opbox as an example
 ---
