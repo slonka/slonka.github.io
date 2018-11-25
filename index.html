@@ -1,0 +1,14 @@
+---
+layout: page
+title: Home
+---
+
+<div class="blog-index">
+    <h3>Latest blog entry:</h3>
+    <section class="list">
+        {% assign posts = site.posts | where:"category","blog" %}
+        {% assign post = posts.first %}
+        {% assign content = post.content %}
+        {% include blog-post.html %}
+    </section>
+</div>

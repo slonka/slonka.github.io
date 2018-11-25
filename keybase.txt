@@ -1,0 +1,55 @@
+==================================================================
+https://keybase.io/krzysztofslonka
+--------------------------------------------------------------------
+
+I hereby claim:
+
+  * I am an admin of https://slonka.net
+  * I am krzysztofslonka (https://keybase.io/krzysztofslonka) on keybase.
+  * I have a public key ASBEYxj-YbujSdwcWKywiN6F0OYKPJDdx4uFTGz3a_NIfwo
+
+To do so, I am signing this object:
+
+{
+  body: {
+    key: {
+      eldest_kid: 0120446318fe61bba349dc1c58acb088de85d0e60a3c90ddc78b854c6cf76bf3487f0a,
+      host: keybase.io,
+      kid: 0120446318fe61bba349dc1c58acb088de85d0e60a3c90ddc78b854c6cf76bf3487f0a,
+      uid: dfe6af439941dbe25f886eb037446919,
+      username: krzysztofslonka
+    },
+    merkle_root: {
+      ctime: 1514408678,
+      hash: ddd68c97cb256ba7ef81809882f551ae8310fe36bb76a7deb73b3730eb2604e79af334f1790b81e55acc2f7f936f6535ee7a05feca9dc4719acc8294f62a4fb2,
+      hash_meta: ef323e2f49f4acde9c06fbc4906f8face3f17412d1d201b27dea2388cdd7dbb6,
+      seqno: 1862494
+    },
+    service: {
+      hostname: slonka.net,
+      protocol: https:
+    },
+    type: web_service_binding,
+    version: 1
+  },
+  client: {
+    name: keybase.io go client,
+    version: 1.0.38
+  },
+  ctime: 1514408715,
+  expire_in: 504576000,
+  prev: ba4a3e4db18d0d453274c43f267fb1029c9e8284949191671fd8e1146b8ed7fb,
+  seqno: 27,
+  tag: signature
+}
+
+which yields the signature:
+
+hKRib2R5hqhkZXRhY2hlZMOpaGFzaF90eXBlCqNrZXnEIwEgRGMY/mG7o0ncHFissIjehdDmCjyQ3ceLhUxs92vzSH8Kp3BheWxvYWTFA0p7ImJvZHkiOnsia2V5Ijp7ImVsZGVzdF9raWQiOiIwMTIwNDQ2MzE4ZmU2MWJiYTM0OWRjMWM1OGFjYjA4OGRlODVkMGU2MGEzYzkwZGRjNzhiODU0YzZjZjc2YmYzNDg3ZjBhIiwiaG9zdCI6ImtleWJhc2UuaW8iLCJraWQiOiIwMTIwNDQ2MzE4ZmU2MWJiYTM0OWRjMWM1OGFjYjA4OGRlODVkMGU2MGEzYzkwZGRjNzhiODU0YzZjZjc2YmYzNDg3ZjBhIiwidWlkIjoiZGZlNmFmNDM5OTQxZGJlMjVmODg2ZWIwMzc0NDY5MTkiLCJ1c2VybmFtZSI6ImtyenlzenRvZnNsb25rYSJ9LCJtZXJrbGVfcm9vdCI6eyJjdGltZSI6MTUxNDQwODY3OCwiaGFzaCI6ImRkZDY4Yzk3Y2IyNTZiYTdlZjgxODA5ODgyZjU1MWFlODMxMGZlMzZiYjc2YTdkZWI3M2IzNzMwZWIyNjA0ZTc5YWYzMzRmMTc5MGI4MWU1NWFjYzJmN2Y5MzZmNjUzNWVlN2EwNWZlY2E5ZGM0NzE5YWNjODI5NGY2MmE0ZmIyIiwiaGFzaF9tZXRhIjoiZWYzMjNlMmY0OWY0YWNkZTljMDZmYmM0OTA2ZjhmYWNlM2YxNzQxMmQxZDIwMWIyN2RlYTIzODhjZGQ3ZGJiNiIsInNlcW5vIjoxODYyNDk0fSwic2VydmljZSI6eyJob3N0bmFtZSI6InNsb25rYS5uZXQiLCJwcm90b2NvbCI6Imh0dHBzOiJ9LCJ0eXBlIjoid2ViX3NlcnZpY2VfYmluZGluZyIsInZlcnNpb24iOjF9LCJjbGllbnQiOnsibmFtZSI6ImtleWJhc2UuaW8gZ28gY2xpZW50IiwidmVyc2lvbiI6IjEuMC4zOCJ9LCJjdGltZSI6MTUxNDQwODcxNSwiZXhwaXJlX2luIjo1MDQ1NzYwMDAsInByZXYiOiJiYTRhM2U0ZGIxOGQwZDQ1MzI3NGM0M2YyNjdmYjEwMjljOWU4Mjg0OTQ5MTkxNjcxZmQ4ZTExNDZiOGVkN2ZiIiwic2Vxbm8iOjI3LCJ0YWciOiJzaWduYXR1cmUifaNzaWfEQBxx86ghS93rV7sN9PUO3aF8UhEHgsAcmGoJbvTz9bqR1QnVCRA3Xx8mG2n8G64lcUI/EEVHjUDsq2reqK4bKgqoc2lnX3R5cGUgpGhhc2iCpHR5cGUIpXZhbHVlxCB1Muu6xw4xSz2OlCAeC2umPascdzQ+3nZ9Dt7j4Rri16N0YWfNAgKndmVyc2lvbgE=
+
+And finally, I am proving ownership of this host by posting or
+appending to this document.
+
+View my publicly-auditable identity here: https://keybase.io/krzysztofslonka
+
+==================================================================
