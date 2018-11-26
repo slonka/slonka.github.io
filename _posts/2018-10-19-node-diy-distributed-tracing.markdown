@@ -18,6 +18,7 @@ star: true
 category: blog
 author: slonka
 description: Introduction to distributed tracing and an example implementation in node.js
+published: true
 ---
 
 
