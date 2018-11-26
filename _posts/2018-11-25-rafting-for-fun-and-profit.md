@@ -53,13 +53,15 @@ The way I picture the algorithm is a state machine with 3 states:
 &nbsp;
 
 The state changes based on input from other nodes and time passing by.
-Every node starts in a follower state.
-If it doesn't receive heartbeat from a leader then it transitions into candidate
+Here is the summary of rules:
+
+1. Every node starts in a follower state.
+2. If it doesn't receive heartbeat from a leader then it transitions into candidate
 and bumps current term.
-A candidate requests votes from it's peers and votes for himself.
-If a node gets majority of the votes it becomes a leader.
-A leader must send heartbeat to other nodes to make sure they are alive.
-If a node receives heartbeat with higher term it changes it's state to follower and
+3. A candidate requests votes from it's peers and votes for himself.
+4. If a node gets majority of the votes it becomes a leader.
+5. A leader must send heartbeat to other nodes to make sure they are alive.
+6. If a node receives heartbeat with higher term it changes it's state to follower and
 updates it's term.
 
 ## Implementation
@@ -74,6 +76,8 @@ I run the server in 5 tmux panes and observed the behavior.
 After a couple of hours of tinkering I eventually got it right and here is the result.
 
 <iframe width="810" height="455" src="https://www.youtube.com/embed/nRrJZjvlEbk" frameborder="0" allowfullscreen></iframe>
+
+Let's see the 200-ish lines of monstrosity behind this:
 
 ```javascript
 const http = require('http');
@@ -298,3 +302,152 @@ http.createServer(app.callback())
 console.log(`listening on port http://${HOST}:${PORT}`);
 ```
 
+There are definitely some unnecessary if statements, checks that don't make sense.
+Making changes in this code meant I had to re-check every path I thought about manually.
+After making a change I did not know the consequences, I was clueless.
+
+Now I know the problem, let's make it better.
+
+## TDD to the rescue
+
+A state machine like that should be fairly easy to test, right?
+I've got a bunch of input states,
+bunch of transition functions
+and expected output after transitions.
+It's as easy as it can get.
+
+Let's go one by one over the list of steps I outlined in the introduction.
+I started with a simple test:
+
+```javascript
+it('should start with initial state', function() {
+});
+```
+
+Easy - create a state machine,
+set initial state in constructor
+and check it's state is the same as the default state defined in the paper.
+
+Next:
+
+```javascript
+it('should transition to candidate role when it did not receive a heartbeat', async function() {
+});
+```
+
+Hmm - this one is more tricky, we need some timeouts
+and keep track of the last heartbeat.
+I added a `setTimeout` coupled with `clearTimeout`,
+a function that will check if leader timed out - `leaderTimedOut()`
+and voila: it works...
+but it's kind of "janky"[*](http://jankfree.org/) and unstable...
+To understand why I had to refresh my memory about event loop
+and conditions for a node process to exit.
+
+{% raw %}
+```
+              ┌───────────────────────┐
+              │  Application Startup  │
+              └───────────┬───────────┘
+                          │
+                          │ (bootstrap global environment)
+                          │
+              ┌───────────┴───────────┐
+              │    [[ uv_run() ]]     │
+              └───────────┬───────────┘
+                          │
+            ┌─────────────┴─────────────┐
+       ╭────┤  [[ uv__run_timers()  ]]  │
+       │    ┢━━━━━━━━━━━━━━━━━━━━━━━━━━━┪
+       │    ┃    {{ setTimeout() }}     ┃
+       │    ┃    {{ setInterval() }}    ┃
+       │    ┗━━━━━━━━━━━━━┯━━━━━━━━━━━━━┛
+       │                  │
+       │    ┌─────────────┴─────────────┐
+       │    │  [[ uv__run_pending() ]]  │
+       │    ┢━━━━━━━━━━━━━━━━━━━━━━━━━━━┪
+       │    ┃ All completed write reqs. ┃
+       │    ┃                           ┃
+       │    ┃ Error Reporting for:      ┃
+       │    ┃ - TCP ECONNREFUSED        ┃
+       │    ┃ - PIPE (all errors)       ┃
+       │    ┗━━━━━━━━━━━━━┯━━━━━━━━━━━━━┛
+       │                  │
+       │    ┌─────────────┴─────────────┐
+       │    │   [[ uv__run_idle() ]]    │
+       │    ┢━━━━━━━━━━━━━━━━━━━━━━━━━━━┪
+       │    ┃  {{ clearImmediate() }}   ┃
+       │    ┗━━━━━━━━━━━━━┯━━━━━━━━━━━━━┛
+       │                  │
+       │    ┌─────────────┴─────────────┐
+       │    │  [[ uv__run_prepare() ]]  │
+       │    ┢━━━━━━━━━━━━━━━━━━━━━━━━━━━┪
+       │    ┃    CPU Idle Profiler      ┃
+       │    ┃ (Inform V8 profiler that  ┃
+       │    ┃  Node is about to idle)   ┃
+       │    ┗━━━━━━━━━━━━━┯━━━━━━━━━━━━━┛
+       │                  │
+       │    ┌─────────────┴─────────────┐
+       │    │    [[ uv__io_poll() ]]    │
+       │    ┢━━━━━━━━━━━━━━━━━━━━━━━━━━━┪
+       │    ┃(Poll for incoming or      ┃
+       │    ┃completed events signaled  ┃
+       │    ┃back from the kernel)      ┃
+       │    ┃                           ┃
+       │    ┗━━━━━━━━━━━━━┯━━━━━━━━━━━━━┛
+       │                  │
+       │    ┌─────────────┴─────────────┐
+       │    │   [[ uv__run_check() ]]   │
+       │    ┢━━━━━━━━━━━━━━━━━━━━━━━━━━━┪
+       │    ┃   {{ setImmediate() }}    ┃
+       │    ┃                           ┃
+       │    ┃    CPU Idle Profiler      ┃
+       │    ┃ (Inform V8 profiler that  ┃
+       │    ┃  Node is no longer idle)  ┃
+       │    ┗━━━━━━━━━━━━━┯━━━━━━━━━━━━━┛
+       │                  │
+       │  ┌───────────────┴───────────────┐
+       │  │[[ uv__run_closing_handles() ]]│
+       │  ┢━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┪
+       │  ┃(Currently not used by Node as ┃
+       ╰──┨all close callbacks are instead┃
+          ┃called prior to this via.      ┃
+          ┃process.nextTick())            ┃
+          ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+```
+{% endraw %}
+<figcaption class="caption">source: https://gist.github.com/trevnorris/05531d8339f8e265bd49</figcaption>
+
+&nbsp;
+
+Every asynchronous *thing* is going to be queued up in the event loop
+to be processed at the later time.
+A node process will not exit if it has anything left to do in the event loop.
+I made sure that the event loop was constantly occupied by clearing a timeout an starting a new one every time I called `resetLeaderTimeout()`.
+
+Ok, so how to fix it?
+There is a function that can be called on a
+`timeout`,
+`immediate`
+and `subprocess`
+called [unref](https://nodejs.org/api/timers.html#timers_timeout_unref)
+which makes "object not require the Node.js event loop to remain active".
+
+Alright, we fixed that one - the rest of them is pretty much rinse & repeat.
+In couple of places we need `testdouble` to mock responses to force positive / negative votes,
+but that is pretty standard.
+
+One thing that is quite cool is that I've abstracted a `LocalRaftStateMachine`
+and `RemoteRaftStateMachine`.
+The local version keeps everything in memory and is great for testing.
+Nodes interact by directly calling functions on each other.
+The remote version works with a hooked up server and communicates via HTTP RPC.
+
+## Summary
+
+During this exercise I've learned a lot, mostly:
+- distributed consensus is hard
+- tdd can make your life easier but it's hard to pull off when you don't know what you're doing
+- making small things that do not work and won't be deployed anywhere can still be valuable
+
+You can see the full source code [in this repository](https://github.com/slonka/rafting-for-fun-and-profit).
