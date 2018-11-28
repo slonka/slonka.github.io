@@ -24,7 +24,7 @@ published: true
 
 ## Intro
 
-Being a part of an organization like [allegro.tech](http://allegro.tech)
+Being a part of an organization like [allegro](http://allegro.tech)
 I can participate in something that's called "Skylab training days" which is
 a day dedicated to working on something cool and interesting, not related to current sprint.
 Something similar to Google's "20% time".
