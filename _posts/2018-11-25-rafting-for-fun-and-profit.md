@@ -47,6 +47,8 @@ The way I picture the algorithm is a state machine with 3 states:
 - candidate
 - leader
 
+The state is separate for each node of course.
+
 ![raft sate machine](/assets/images/2018-11-25-rafting-for-fun-and-profit/state-machine.png)
 <figcaption class="caption">Raft state changes - from raft paper</figcaption>
 
@@ -77,102 +79,28 @@ After a couple of hours of tinkering I eventually got it right and here is the r
 
 <iframe width="810" height="455" src="https://www.youtube.com/embed/nRrJZjvlEbk" frameborder="0" allowfullscreen></iframe>
 
-Let's see the 200-ish lines of monstrosity behind this:
+Let's see an example function from the 200-ish lines of monstrosity behind this:
 
 ```javascript
-const http = require('http');
-const _ = require('koa-route');
-const Koa = require('koa');
-const bodyParser = require('koa-bodyparser');
-const request = require('request-promise-native');
-
-const environment = process.env.ENVIRONMENT;
-
-const peersPath = environment === 'test' ? 'peers-test' : 'peers-prod';
-
-const {
-    peers,
-    ipPortToName
-} = require(`./${peersPath}`);
-
-const {
-    getPeersWithoutMe,
-} = require('./peers-utils');
-
-const app = new Koa();
-app.use(bodyParser());
-
-const HOST = process.env.HOST;
-const PORT = process.env.PORT;
-const nodeId = `${HOST}:${PORT}`;
-
-const roles = {
-    follower: 'follower',
-    leader: 'leader',
-    candidate: 'candidate',
-};
-
-const REQUEST_TIMEOUT = 500;
-const HEARTBEAT_INTERVAL = 3000;
-const LEADER_TIMEOUT = 4000;
-const LEADER_TIMEOUT_SPRED = 200;
-
-let role = 'follower';
-let lastHeartbeat = null;
-let votesGranted = 0;
-let currentTerm = 0;
-let votedFor = null;
-let leaderTimeout;
-
-async function requestVoteFromPeers() {
-
-    console.log('requesting vote from peers');
-    const peersWithoutMe = getPeersWithoutMe(peers, nodeId);
-    votedFor = nodeId;
-
-    const responses = await Promise.all(peersWithoutMe.map(p => request.post({
-        url: `http://${p}/raft/request-vote`,
-        json: {
-            term: currentTerm,
-            candidateId: nodeId
-        },
-        timeout: REQUEST_TIMEOUT,
-        resolveWithFullResponse: true
-    })).map(p => p.catch(e => e)));
-
-    const positiveVotes = responses.map((r, index) => {
-        if (r.statusCode === 200) {
-            return r.body.voteGranted === true && r.body.term === currentTerm;
-        } else {
-            console.log('got not valid response from', ipPortToName[peers[index]]);
-            return false;
-        }
-    }).reduce((prev, current) => prev + (current === true ? 1 : 0), 1);
-
-    votesGranted = positiveVotes;
-
-    return positiveVotes;
-}
-
 async function sendHeartBeat() {
     if (role === roles.leader) {
         const peersWithoutMe = getPeersWithoutMe(peers, nodeId);
         const responses = await Promise.all(peersWithoutMe.map(p => request.post({
             url: `http://${p}/raft/append-entries`,
             json: {
-                term: currentTerm,
+                term: currentTerm, // (1)
             },
             timeout: REQUEST_TIMEOUT,
             resolveWithFullResponse: true
         })).map(p => p.catch(e => e)));
 
-        // am I still the leader?
+        // am I still the leader? (2)
         const stillLeader = responses.every(r => {
             if (r.statusCode === 200) {
                 return r.body.term === currentTerm;
             } else if (r.statusCode !== 200) {
                 return true;
-            } else {
+            } else { // (3)
                 return false;
             }
         });
@@ -184,123 +112,14 @@ async function sendHeartBeat() {
         }
     }
 }
-
-function checkLeaderTimedOut() {
-    const now = new Date().getTime();
-    const diff = Math.abs(now - lastHeartbeat);
-
-    return diff > LEADER_TIMEOUT;
-}
-
-function resetLeaderTimeout() {
-    clearTimeout(leaderTimeout);
-    leaderTimeout = setTimeout(startLeaderTimeout, LEADER_TIMEOUT + (LEADER_TIMEOUT_SPRED * Math.random()));
-}
-
-async function startLeaderTimeout() {
-    if ((role === roles.follower || role === roles.candidate) && votedFor === null && checkLeaderTimedOut()) {
-        currentTerm += 1;
-
-        role = roles.candidate;
-        const positiveVotes = await requestVoteFromPeers();
-
-        if (votedFor === nodeId && positiveVotes > peers.length / 2) {
-            role = roles.leader;
-            console.log(nodeId, 'became a leader');
-            currentTerm += 1;
-            await sendHeartBeat();
-        } else {
-            console.log('startLeaderTimeout: retrying');
-            resetLeaderTimeout();
-        }
-        votedFor = null;
-    }
-}
-
-leaderTimeout = setTimeout(startLeaderTimeout, LEADER_TIMEOUT + (LEADER_TIMEOUT_SPRED * Math.random()));
-
-function state(ctx) {
-    ctx.response.set('Access-Control-Allow-Origin', '*');
-
-    ctx.body = {
-        currentTerm,
-        lastHeartbeat,
-        peers: getPeersWithoutMe(peers, nodeId),
-        role,
-        nodeId,
-        votedFor,
-        votesGranted,
-    }
-}
-
-function appendEntries(ctx) {
-    lastHeartbeat = new Date().getTime();
-
-    const messageTerm = parseInt(ctx.request.body.term, 10);
-    console.log(new Date(), 'got heartbeat from', ipPortToName[ctx.ip] || ctx.ip, 'with term', messageTerm);
-
-    if (messageTerm >= currentTerm) {
-        currentTerm = messageTerm;
-        role = roles.follower;
-        votesGranted = null;
-    }
-
-    resetLeaderTimeout();
-
-    votedFor = null;
-    votesGranted = 0;
-
-    ctx.body = {
-        term: currentTerm,
-        "success": true
-    }
-}
-
-function requestVote(ctx) {
-    const candidateId = ctx.request.body.candidateId;
-    const term = ctx.request.body.term;
-    console.log('got request to vote for', ipPortToName[candidateId] || candidateId, 'term', term, 'currentTerm', currentTerm, 'votedFor', votedFor);
-
-    if (role === roles.leader) {
-        ctx.response.body = {
-            term: currentTerm,
-            voteGranted: false
-        };
-    } else if (term === currentTerm && votedFor !== null) {
-        ctx.response.body = {
-            term: currentTerm,
-            voteGranted: false
-        };
-    } else if (term > currentTerm) {
-        console.log('voting for', ipPortToName[candidateId] || candidateId);
-        votedFor = candidateId;
-        currentTerm = term;
-        role = roles.follower;
-        votesGranted = null;
-        resetLeaderTimeout();
-
-        ctx.response.body = {
-            term: currentTerm,
-            voteGranted: true
-        };
-        currentTerm = term;
-    } else {
-        ctx.response.body = {
-            term: currentTerm,
-            voteGranted: false
-        };
-    }
-}
-
-app.use(_.get('/raft/state', state));
-app.use(_.post('/raft/append-entries', appendEntries));
-app.use(_.post('/raft/request-vote', requestVote));
-
-http.createServer(app.callback())
-    .listen(PORT, HOST);
-
-console.log(`listening on port http://${HOST}:${PORT}`);
 ```
+
+As you can see, there is HTTP code mixed with algorithm logic (1)
+a check counting votes that for some reason checks the term (2)
+and some dead code (3).
+
+You can see the full code of this at
+[spaghetti-raft.js](https://gist.github.com/slonka/1f02a9b403891f624dffa2a121927d1c)
 
 There are definitely some unnecessary if statements, checks that don't make sense.
 Making changes in this code meant I had to re-check every path I thought about manually.
@@ -340,90 +159,59 @@ and keep track of the last heartbeat.
 I added a `setTimeout` coupled with `clearTimeout`,
 a function that will check if leader timed out - `leaderTimedOut()`
 and voila: it works...
-but it's kind of "janky"[*](http://jankfree.org/) and unstable...
+
+```javascript
+async transitionToCandidate() {
+    if (this.leaderTimedOut() && this.state.role !== roles.leader) {
+        this.state.role = roles.candidate;
+        this.state.currentTerm += 1;
+        this.state.alreadyVotedInThisTerm = true;
+
+        const votes = await this.getVotes();
+        const positive = this.countPositiveVotes(votes);
+        logger.log('received positive votes', positive);
+        this.state.votesGranted = positive;
+
+        if (positive > (this.state.peers.size / 2)) {
+            clearTimeout(this.leaderTimeout);
+            this.transitionToLeader();
+        } else {
+            this.resetLeaderTimeout(); // (1)
+        }
+    }
+}
+
+resetLeaderTimeout() {
+    clearTimeout(this.leaderTimeout);
+    this.leaderTimeout = setTimeout(this.transitionToCandidate.bind(this), config.leaderTimeout);
+}
+```
+
+But it's kind of "janky"[*](http://jankfree.org/) and unstable...
+Sometimes it stops immediately,
+sometimes the test runs for a couple of seconds.
 To understand why I had to refresh my memory about event loop
 and conditions for a node process to exit.
-
-{% raw %}
-```
-              ┌───────────────────────┐
-              │  Application Startup  │
-              └───────────┬───────────┘
-                          │
-                          │ (bootstrap global environment)
-                          │
-              ┌───────────┴───────────┐
-              │    [[ uv_run() ]]     │
-              └───────────┬───────────┘
-                          │
-            ┌─────────────┴─────────────┐
-       ╭────┤  [[ uv__run_timers()  ]]  │
-       │    ┢━━━━━━━━━━━━━━━━━━━━━━━━━━━┪
-       │    ┃    {{ setTimeout() }}     ┃
-       │    ┃    {{ setInterval() }}    ┃
-       │    ┗━━━━━━━━━━━━━┯━━━━━━━━━━━━━┛
-       │                  │
-       │    ┌─────────────┴─────────────┐
-       │    │  [[ uv__run_pending() ]]  │
-       │    ┢━━━━━━━━━━━━━━━━━━━━━━━━━━━┪
-       │    ┃ All completed write reqs. ┃
-       │    ┃                           ┃
-       │    ┃ Error Reporting for:      ┃
-       │    ┃ - TCP ECONNREFUSED        ┃
-       │    ┃ - PIPE (all errors)       ┃
-       │    ┗━━━━━━━━━━━━━┯━━━━━━━━━━━━━┛
-       │                  │
-       │    ┌─────────────┴─────────────┐
-       │    │   [[ uv__run_idle() ]]    │
-       │    ┢━━━━━━━━━━━━━━━━━━━━━━━━━━━┪
-       │    ┃  {{ clearImmediate() }}   ┃
-       │    ┗━━━━━━━━━━━━━┯━━━━━━━━━━━━━┛
-       │                  │
-       │    ┌─────────────┴─────────────┐
-       │    │  [[ uv__run_prepare() ]]  │
-       │    ┢━━━━━━━━━━━━━━━━━━━━━━━━━━━┪
-       │    ┃    CPU Idle Profiler      ┃
-       │    ┃ (Inform V8 profiler that  ┃
-       │    ┃  Node is about to idle)   ┃
-       │    ┗━━━━━━━━━━━━━┯━━━━━━━━━━━━━┛
-       │                  │
-       │    ┌─────────────┴─────────────┐
-       │    │    [[ uv__io_poll() ]]    │
-       │    ┢━━━━━━━━━━━━━━━━━━━━━━━━━━━┪
-       │    ┃(Poll for incoming or      ┃
-       │    ┃completed events signaled  ┃
-       │    ┃back from the kernel)      ┃
-       │    ┃                           ┃
-       │    ┗━━━━━━━━━━━━━┯━━━━━━━━━━━━━┛
-       │                  │
-       │    ┌─────────────┴─────────────┐
-       │    │   [[ uv__run_check() ]]   │
-       │    ┢━━━━━━━━━━━━━━━━━━━━━━━━━━━┪
-       │    ┃   {{ setImmediate() }}    ┃
-       │    ┃                           ┃
-       │    ┃    CPU Idle Profiler      ┃
-       │    ┃ (Inform V8 profiler that  ┃
-       │    ┃  Node is no longer idle)  ┃
-       │    ┗━━━━━━━━━━━━━┯━━━━━━━━━━━━━┛
-       │                  │
-       │  ┌───────────────┴───────────────┐
-       │  │[[ uv__run_closing_handles() ]]│
-       │  ┢━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┪
-       │  ┃(Currently not used by Node as ┃
-       ╰──┨all close callbacks are instead┃
-          ┃called prior to this via.      ┃
-          ┃process.nextTick())            ┃
-          ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
-```
-{% endraw %}
-<figcaption class="caption">source: https://gist.github.com/trevnorris/05531d8339f8e265bd49</figcaption>
-
-&nbsp;
 
 Every asynchronous *thing* is going to be queued up in the event loop
 to be processed at the later time.
 A node process will not exit if it has anything left to do in the event loop.
-I made sure that the event loop was constantly occupied by clearing a timeout an starting a new one every time I called `resetLeaderTimeout()`.
+I made sure that the event loop was constantly occupied
+by clearing a timeout an starting a new one every time I called `resetLeaderTimeout()`.
+
+The situation looks like this when `transitionToCandidate()` is called:
+
+```
+Stack: [transitionToCandidate()]
+Event loop: []
+```
+
+And by the time it exits it's on the event loop (1)
+
+```
+Stack: []
+Event loop: [transitionToCandidate()]
+```
 
 Ok, so how to fix it?
 There is a function that can be called on a
