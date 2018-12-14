@@ -221,7 +221,71 @@ and `subprocess`
 called [unref](https://nodejs.org/api/timers.html#timers_timeout_unref)
 which makes "object not require the Node.js event loop to remain active".
 
-Alright, we fixed that one - the rest of them is pretty much rinse & repeat.
+Alright, we fixed that one, but it's not ideal.
+Our tests take more time than they should and it's because we use real timers.
+
+```
+ PASS  state-machine/state-machine.test.js
+  ✓ should start with initial state (4ms)
+  ✓ should not transition to leader when can not get majority (38ms)
+  ✓ should transition to candidate role when it did not receive a heartbeat (17ms)
+  ✓ should send heartbeats when leader (1ms)
+  ✓ should become follower when it gets heartbeat with higher term
+  ✓ should become candidate when it does not get heartbeat from a leader for a long time (16ms)
+  ✓ should start a second voting when first vote is unsuccessful (16ms)
+  ✓ should cast a vote when not voted in this term (1ms)
+  ✓ should not cast a vote when voted in this term
+  ✓ should elect a leader (50ms)
+  starting voting
+    ✓ should transition from candidate to leader when recived majority of votes (1ms)
+    ✓ should not transition from candidate to leader when recived less than majority of votes
+```
+
+Sum: ~144 ms
+
+What can we do about it?
+[Jest](https://jestjs.io/docs/en/timer-mocks) allows mocking timers and
+we're going to use it.
+The process is quite easy,
+we have recursive timers so as documentation suggests,
+so we're going to run `jest.runOnlyPendingTimers()`
+to only advance the timers that are scheduled and not enter infinite loop.
+
+In each test we replace calls to `sleep()` with `jest.runOnlyPendingTimers()`.
+One tricky test is the last one that makes sure a leader is selected.
+Simply running `runOnlyPendingTimers()` doesn't work
+because `getVotes()` uses promises and
+running timers is not enough because promises are handled by microtask queue in the event loop.
+
+What we can do is run all pending timers,
+that sets the nodes in candidate / voter phase,
+replace mocked timers with real ones so we do not advance beyond that,
+lastly we advance microtasks so that vote results come back to the leader.
+
+After that cycle a leader should be selected.
+We can run tests and see the results:
+
+```
+ PASS  state-machine/state-machine.test.js
+  ✓ should start with initial state (3ms)
+  ✓ should not transition to leader when can not get majority (1ms)
+  ✓ should transition to candidate role when it did not receive a heartbeat (2ms)
+  ✓ should transition from candidate to leader when recived majority of votes
+  ✓ should not transition from candidate to leader when recived less than majority of votes (1ms)
+  ✓ should send heartbeats when leader
+  ✓ should become follower when it gets heartbeat with higher term
+  ✓ should become candidate when it does not get heartbeat from a leader for a long time (1ms)
+  ✓ should start a second voting when first vote is unsuccessful
+  ✓ should cast a vote when not voted in this term (1ms)
+  ✓ should not cast a vote when voted in this term
+  ✓ should elect a leader (2ms)
+```
+
+Sum: ~11 ms
+
+We improved our test time by a factor of 10 - that's pretty nice.
+
+The rest of them is pretty much rinse & repeat.
 In couple of places we need `testdouble` to mock responses to force positive / negative votes,
 but that is pretty standard.
 
