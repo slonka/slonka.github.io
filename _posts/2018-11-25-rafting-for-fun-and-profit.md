@@ -54,8 +54,8 @@ and the repository includes a slick front-end visualization.
 
 There are 3 main endpoints:
 ```
-POST /raft/request-vote - starting a vote
-POST /raft/append-entries - sending heartbeats
+POST	/raft/request-vote - starting a vote
+POST	/raft/append-entries - sending heartbeats
 GET	/raft/state - (dashboard only) dumping raft state
 ```
 
