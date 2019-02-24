@@ -21,6 +21,7 @@ star: true
 category: slides
 author: slonka
 description: An introduction to profiling using Allegro's Opbox as an example
+published: false
 ---
 
 
