@@ -9,19 +9,19 @@ layout: page
 <h2>Skills</h2>
 
 <ul class="skill-list">
-	<li>JavaScript - TypeScript - Elm - Java - Haskel</li>
-	<li>Node.js - Spring Framework</li>
-	<li>Angular - React</li>
+	<li>JavaScript - TypeScript - Kotlin - Java - Elm</li>
+	<li>Node.js - Restify - Express.js - Koa.js - Spring Framework</li>
+	<li>Angular.js - React.js</li>
 	<li>MySQL - PostgreSQL - MongoDB - Neo4J</li>
 	<li>Mocha - Jest - JUnit</li>
 	<li>AWS - S3 - ECS - SQS - SNS - Lambda</li>
-	<li>Terraform - Spinnaker</li>
+	<li>Terraform - Consul - Packer</li>
+    <li>Bamboo - Jenkins - Codeship - Spinnaker</li>
 	<li>Docker - K8S - Vagrant - Puppet</li>
 	<li>IntelliJ - Eclipse</li>
-	<li>AJAX</li>
-	<li>Socket.io</li>
-	<li>OpenAPI</li>
-	<li>Microservices</li>
+	<li>AJAX - Socket.io</li>
+	<li>OpenAPI - Swagger</li>
+	<li>Microservices - Service mesh - Envoy</li>
 	<li>Grunt - Gulp - Yeoman</li>
 	<li>Git - Mercurial</li>
 	<li>Scrum - Kanban</li>
