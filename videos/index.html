@@ -2,7 +2,7 @@
 # presentation page must be named index.html and in its own folder to support pagination
 # https://jekyllrb.com/docs/pagination/
 layout: page
-title: Slides
+title: Videos
 ---
 
 <section class="list project-list">
@@ -10,7 +10,7 @@ title: Slides
 		<p class="text-center">Nothing published yet!</p>
 	{% elsif site.paginate %}
 		{% for post in paginator.posts %}
-			{% if post.category == 'slides' %}
+			{% if post.category == 'videos' %}
 				{% if post.hidden != true %}
 					{% include blog-post.html %}
 				{% endif %}
@@ -20,7 +20,7 @@ title: Slides
 		{% include pagination.html%}
 	{% else %}
 		{% for post in site.posts %}
-			{% if post.category == 'slides' %}
+			{% if post.category == 'videos' %}
 				{% if post.hidden != true %}
 					{% include blog-post.html %}
 				{% endif %}

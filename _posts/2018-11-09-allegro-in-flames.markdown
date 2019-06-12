@@ -13,17 +13,23 @@ tag:
 - performance
 - v8
 - v8 profiler
+- prof
+- profiler
 - --prof
 - --prof-process
 - 0x
+- videos
 - slides
 star: true
-category: slides
+category: videos
 author: slonka
 description: An introduction to profiling using Allegro's Opbox as an example
-published: false
+published: true
 ---
 
+## Video
+
+<iframe width="560" height="310" src="https://www.youtube.com/embed/opMbDmLvqhs" frameborder="0" allowfullscreen></iframe>
 
 ## Presentation
 
@@ -40,7 +46,3 @@ published: false
 </iframe>
 <!-- Google embed ends -->
 </div>
-
-## Video
-
-To be added
