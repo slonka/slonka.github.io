@@ -1,6 +1,6 @@
 # main text of home
 name: Krzysztof Słonka
-bio: Software engineer at allegro.tech. Pragmatic programmer. I write lines of text that end with a semicolon;
+bio: Software engineer at Kong. Pragmatic programmer. I write lines of text that end with a semicolon;
 
 # twitter summary info
 description: A blog about technology
@@ -17,7 +17,7 @@ resume-external: false
 resume-url: https://google.com/?q=my+resume
 
 url: https://slonka.net
-# your url: http://USERNAME.github.io
+# your url: https://USERNAME.github.io
 
 permalink: /:title/
 
@@ -56,7 +56,7 @@ gitlab: slonka
 authors:
     slonka:
         name: Krzysztof Słonka
-        bio: Software engineer at allegro.tech. Pragmatic programmer. I write lines of text that end with a semicolon;
+        bio: Software engineer at Kong. Pragmatic programmer. I write lines of text that end with a semicolon;
         external-image: false
         picture: assets/images/profile.jpg
         twitter: KrzysztofSlonka
