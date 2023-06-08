@@ -76,7 +76,7 @@ Use a preferred way to book a training session:
 
 ## Who am I?
 
-Check out my [about page](../about.md).
+Check out my [about page](/about).
 
 ## Languages
 
