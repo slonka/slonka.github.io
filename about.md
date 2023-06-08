@@ -36,10 +36,3 @@ layout: page
 	<li><a href="https://www.schibsted.pl/news/easier-way-for-journalists-to-test-their-headlines/">A/B Tool</a></li>
 	<li><a href="https://www.schibsted.com/no/Press-Room/News-archive/2018/Aftenpostens-reinvented-frontpage-Best-in-Europe/">Curate</a></li>
 </ul>
-
-<h2>Personal projects</h2>
-
-<ul>
-	<li><a href="https://undoo.herokuapp.com/details.html">Undoo</a></li>
-	<li><a href="https://knbit.edu.pl/pl/projekty/8/getintime">GetInTime</a></li>
-</ul>
