@@ -32,6 +32,8 @@ description: Sane development environment for envoy.
 published: true
 ---
 
+![Linkerd Logo](https://cncf-branding.netlify.app/img/projects/linkerd/horizontal/color/linkerd-horizontal-color.svg)
+
 # Mastering the Mesh: A Comprehensive Guide to Linkerd 2 Service Mesh
 
 This course is designed to teach you everything you need to know about Linkerd 2, a Service Mesh that provides a way to control and monitor the communication between services in a microservices architecture.
