@@ -28,7 +28,7 @@ tag:
 star: true
 category: trainings
 author: slonka
-description: Sane development environment for envoy.
+description: Linkerd 2 introduction training.
 published: true
 ---
 
@@ -70,7 +70,9 @@ This course is for anyone who wants to learn about Linkerd 2. This includes:
 
 ## Enroll today and start learning about Linkerd 2!
 
-[Send Email to inquire about the training](mailto:trainings@slonka.net?subject=Linkerd%202%20training%20inquiry&body=Dear%20Sir%20or%20Madam,%0A%0AThank%20you%20very%20much%20for%20your%20interest%20in%20%22Mastering%20the%20Mesh%3A%20A%20Comprehensive%20Guide%20to%20Linkerd%202%20Service%20Mesh%22.%20To%20tailor%20the%20session%20to%20your%20needs%2C%20please%20provide%20the%20following%20details%3A%0A%0APreferred%20Dates%20%28in%20order%20of%20preference%29%3A%0A%5BInsert%20date%5D%0A%5BInsert%20date%5D%0A%5BInsert%20date%5D%0A%0AMode%20%28Remote%2FIn-Person%29%3A%0A%5BInsert%20preference%5D%0AIf%20In-Person%2C%20Location%3A%20%5BInsert%20location%5D%0A%0AParticipants%0ANumber%3A%20%5BInsert%20number%5D%0A%0ASpecial%20training%20needs%2Fobjectives%3A%0A%5BInsert%20needs%20and%20objectives%5D%0A%0AContact%20Details%3A%0ANumber%3A%20%5BInsert%20phone%20number%5D%0A%0ALooking%20forward%20to%20a%20successful%20session%21%0A%0ABest%20regards%2C%0AKrzysztof%20S%C5%82onka)
+Use a preferred way to book a training session:
+- [Send Email to inquire about the training](mailto:trainings@slonka.net?subject=Linkerd%202%20training%20inquiry&body=Dear%20Sir%20or%20Madam,%0A%0AThank%20you%20very%20much%20for%20your%20interest%20in%20%22Mastering%20the%20Mesh%3A%20A%20Comprehensive%20Guide%20to%20Linkerd%202%20Service%20Mesh%22.%20To%20tailor%20the%20session%20to%20your%20needs%2C%20please%20provide%20the%20following%20details%3A%0A%0APreferred%20Dates%20%28in%20order%20of%20preference%29%3A%0A%5BInsert%20date%5D%0A%5BInsert%20date%5D%0A%5BInsert%20date%5D%0A%0AMode%20%28Remote%2FIn-Person%29%3A%0A%5BInsert%20preference%5D%0AIf%20In-Person%2C%20Location%3A%20%5BInsert%20location%5D%0A%0AParticipants%0ANumber%3A%20%5BInsert%20number%5D%0A%0ASpecial%20training%20needs%2Fobjectives%3A%0A%5BInsert%20needs%20and%20objectives%5D%0A%0AContact%20Details%3A%0ANumber%3A%20%5BInsert%20phone%20number%5D%0A%0ALooking%20forward%20to%20a%20successful%20session%21%0A%0ABest%20regards%2C%0AKrzysztof%20S%C5%82onka)
+- [Fill out form to inquire about the training](https://forms.gle/q8XCnbJZeGWisAJh7)
 
 ## Languages
 
