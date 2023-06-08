@@ -1,3 +1,5 @@
+#!/usr/bin/env ruby
+
 require 'html-proofer'
 
 # rake test
@@ -11,4 +13,3 @@ end
 task "assets:precompile" do
   exec("jekyll build --config _config.yml,_config-dev.yml")
 end
-

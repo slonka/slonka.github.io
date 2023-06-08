@@ -1,10 +1,14 @@
-source 'http://rubygems.org'
+source 'https://rubygems.org'
 
-gem 'github-pages'
-gem 'html-proofer'
-gem 'jekyll-admin'
-gem "rake"
-gem "rack", ">= 1.6.11"
-gem 'jekyll-sitemap'
-ruby "2.4.2"
+group :jekyll_plugins do
+    gem 'github-pages'
+    gem 'jekyll-seo-tag'
+    gem 'jekyll-gist'
+    gem 'jekyll-feed'
+    gem 'jekyll-admin'
+    gem 'jemoji'
+    gem "jekyll-paginate-v2", "~> 2.0"
+    gem "html-proofer"
+end
 
+gem "webrick", "~> 1.7"
