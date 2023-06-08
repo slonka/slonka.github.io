@@ -2,7 +2,7 @@
 title: About
 layout: page
 ---
-![Krzysztof Słonka]({{ site.url }}/{{ site.picture }})
+![Krzysztof Słonka](/{{ site.picture }})
 
 <p>I have 3+ years of commercial Node.js and JavaScript experience. Currently I'm working mostly as a back-end developer but I enjoy doing interesting and challenging front-end tasks. In my free time I'm expanding my knowledge of Elm and Haskell.</p>
 
