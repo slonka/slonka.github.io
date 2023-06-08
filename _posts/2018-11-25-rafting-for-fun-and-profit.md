@@ -34,7 +34,7 @@ published: true
 
 ## Intro
 
-Being a part of an organization like [allegro](http://allegro.tech)
+Being a part of an organization like [allegro](https://allegro.tech)
 I can participate in something that's called "Skylab training days" which is
 a day dedicated to working on something cool and interesting, not related to current sprint.
 Something similar to Google's "20% time".
@@ -113,7 +113,7 @@ async function sendHeartBeat() {
     if (role === roles.leader) {
         const peersWithoutMe = getPeersWithoutMe(peers, nodeId);
         const responses = await Promise.all(peersWithoutMe.map(p => request.post({
-            url: `http://${p}/raft/append-entries`,
+            url: `https://${p}/raft/append-entries`,
             json: {
                 term: currentTerm, // (1)
             },
@@ -327,7 +327,7 @@ class RaftStateMachine {
 }
 ```
 
-But it's kind of "janky"[*](http://jankfree.org/)...
+But it's kind of "janky"[*](https://jankfree.org/)...
 Sometimes the test completes in milliseconds,
 sometimes it runs for way longer...
 To understand why I had to refresh my memory about event loop
