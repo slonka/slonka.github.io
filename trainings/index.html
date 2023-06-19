@@ -12,7 +12,7 @@ title: Trainings
 		{% for post in paginator.posts %}
 			{% if post.category == 'trainings' %}
 				{% if post.hidden != true %}
-					{% include blog-post.html %}
+					{% include training.html %}
 				{% endif %}
 			{% endif %}
 		{% endfor %}
@@ -22,7 +22,7 @@ title: Trainings
 		{% for post in site.posts %}
 			{% if post.category == 'trainings' %}
 				{% if post.hidden != true %}
-					{% include blog-post.html %}
+					{% include training.html %}
 				{% endif %}
 			{% endif %}
 		{% endfor %}
