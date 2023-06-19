@@ -14,7 +14,10 @@ Currently I'm working on <a href="https://konghq.com/products/kong-mesh">Kong Me
 <h2>Student testimony</h2>
 
 <div style="display: flex; align-items: center;">
-    <img src="/assets/images/student_testimony.png" alt="Your Image" >
+    <figure style="margin: unset">
+        <img src="/assets/images/student_testimony.png" alt="Thomas" >
+      <figcaption style="top: 0">Thomas</figcaption>
+    </figure>
     <blockquote style="flex-grow: 1; padding-left: 10px; margin-left: 10px">
 As an instructor, Krzysztof made a great impression.
 He was able to explain even the most difficult concepts in a very accessible way, which was important for the understanding of the participants.
